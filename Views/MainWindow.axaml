@@ -1,0 +1,53 @@
+<Window 
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:AvaloniaObservableCollection.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:AvaloniaObservableCollection.Views"
+    x:Class="AvaloniaObservableCollection.Views.MainWindow"
+    Icon="/Assets/avalonia-logo.ico"
+    Title="AvaloniaObservableCollection"
+    Width="800"
+    Height="450">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Window.Resources>
+        <DataTemplate x:Key="NormalListItem">
+            <TextBlock Text="{Binding Name}" Background="White" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="CheckedListItem">
+            <TextBlock Text="{Binding Name}" Background="Red" />
+        </DataTemplate>
+    </Window.Resources>
+
+
+    <StackPanel
+        HorizontalAlignment="Center" 
+        VerticalAlignment="Center">        
+
+        <ItemsControl Items="{Binding ListItems}">
+            <ItemsControl.DataTemplates>
+                <local:ListItemDataTemplateSelector
+                    Normal="{StaticResource NormalListItem}"
+                    Checked="{StaticResource CheckedListItem}" />
+            </ItemsControl.DataTemplates>
+        </ItemsControl>
+
+        <ItemsControl Items="{Binding ListItems}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <CheckBox IsChecked="{Binding Checked}" Content="{Binding Name}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Button Content="Change" Command="{Binding ChangeCommand}" />
+    </StackPanel>
+
+
+</Window>
