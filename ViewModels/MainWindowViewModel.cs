@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Windows.Input;
 using AvaloniaObservableCollection.Models;
 using ReactiveUI;
@@ -9,7 +9,7 @@ namespace AvaloniaObservableCollection.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public ObservableCollection<ListItem> ListItems { get; private set; }
+        public FullyObservableCollection<ListItem> ListItems { get; private set; }
 
         public ICommand ChangeCommand { get; }
 
@@ -17,7 +17,9 @@ namespace AvaloniaObservableCollection.ViewModels
         {
             this.ChangeCommand = ReactiveCommand.Create(this.OnChange);
 
-            this.ListItems = new ObservableCollection<ListItem>();
+            this.ListItems = new FullyObservableCollection<ListItem>();
+
+            this.ListItems.CollectionChanged += this.ListItemsCollectionChanged;
 
             var lst = new List<ListItem>
             {
@@ -31,6 +33,11 @@ namespace AvaloniaObservableCollection.ViewModels
             {
                 this.ListItems.Add(item);
             }
+        }
+
+        private void ListItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            Console.WriteLine(e.Action);
         }
 
         private void OnChange()
